@@ -13,6 +13,8 @@ import java.io.IOException;
  * Copied from play.libs.Json
  * We could trim this down quite a bit, but since this was made during a migration from a Play environment to a more agnostic environment, the shortest path was a clone of their helper.
  *
+ * Note: The original implementation threw unspecified RuntimeExceptions, we changed those to a catchable JsonException (still unchecked).
+ *
  * @author Pierre Lecerf (pierre.lecerf@gmail.com)
  * Created on 24/04/2019
  */
@@ -58,7 +60,7 @@ public class Json
             return writer.writeValueAsString(o);
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new JsonException(e);
         }
     }
 
@@ -74,7 +76,7 @@ public class Json
             return mapper().valueToTree(data);
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new JsonException(e);
         }
     }
 
@@ -92,7 +94,7 @@ public class Json
             return mapper().treeToValue(json, clazz);
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new JsonException(e);
         }
     }
 
@@ -161,7 +163,7 @@ public class Json
             return mapper().readTree(src);
         }
         catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new JsonException(t);
         }
     }
 
@@ -177,7 +179,7 @@ public class Json
             return mapper().readTree(src);
         }
         catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new JsonException(t);
         }
     }
 
@@ -193,7 +195,7 @@ public class Json
             return mapper().readTree(src);
         }
         catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new JsonException(t);
         }
     }
 
