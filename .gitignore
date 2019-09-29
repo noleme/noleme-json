@@ -1,0 +1,8 @@
+**DS_Store
+.gitignore~
+/lib
+/target
+/project/target
+/project/project/target
+*.iml
+.idea
