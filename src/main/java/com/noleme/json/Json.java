@@ -211,4 +211,78 @@ public class Json
     {
         objectMapper = mapper;
     }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static String asText(JsonNode node)
+    {
+        return node.isNull() ? null : node.asText();
+    }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static Long asLong(JsonNode node)
+    {
+        return node.isNull() ? null : node.asLong();
+    }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static Integer asInteger(JsonNode node)
+    {
+        return node.isNull() ? null : node.asInt();
+    }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static Double asDouble(JsonNode node)
+    {
+        return node.isNull() ? null : node.asDouble();
+    }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static Boolean asBoolean(JsonNode node)
+    {
+        return node.isNull() ? null : node.asBoolean();
+    }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static ObjectNode asObjectNode(JsonNode node)
+    {
+        if (!node.isObject())
+            throw new JsonException("The provided node cannot be interpreted as an ObjectNode");
+        return node.isNull() ? null : (ObjectNode) node;
+    }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static ArrayNode asArrayNode(JsonNode node)
+    {
+        if (!node.isArray())
+            throw new JsonException("The provided node cannot be interpreted as an ArrayNode");
+        return node.isNull() ? null : (ArrayNode) node;
+    }
 }
