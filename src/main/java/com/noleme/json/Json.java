@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -284,5 +285,31 @@ public class Json
         if (!node.isArray())
             throw new JsonException("The provided node cannot be interpreted as an ArrayNode");
         return node.isNull() ? null : (ArrayNode) node;
+    }
+
+    /**
+     *
+     * @param node
+     * @return
+     */
+    public static Object asValue(JsonNode node)
+    {
+        if (!node.isValueNode())
+            throw new JsonException("The provided node is not a ValueNode");
+        if (node.isNull())
+            return null;
+        if (node.isTextual())
+            return node.asText();
+        if (node.isBoolean())
+            return node.asBoolean();
+        if (node.isDouble())
+            return node.asDouble();
+        if (node.isLong())
+            return node.asLong();
+        if (node.isInt())
+            return node.asInt();
+        if (node.isPojo())
+            return ((POJONode)node).getPojo();
+        return node;
     }
 }
