@@ -9,6 +9,8 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Copied from play.libs.Json
@@ -311,5 +313,31 @@ public class Json
         if (node.isPojo())
             return ((POJONode)node).getPojo();
         return node;
+    }
+
+    /**
+     *
+     * @param data
+     * @return
+     */
+    public static ObjectNode toJsonObject(final Map<String, ?> data)
+    {
+        ObjectNode array = Json.newObject();
+        for (Map.Entry<String, ?> item : data.entrySet())
+            array.set(item.getKey(), Json.toJson(item.getValue()));
+        return array;
+    }
+
+    /**
+     *
+     * @param data
+     * @return
+     */
+    public static ArrayNode toJsonArray(final List<?> data)
+    {
+        ArrayNode array = Json.newArray();
+        for (Object item : data)
+            array.add(Json.toJson(item));
+        return array;
     }
 }
