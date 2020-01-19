@@ -1,6 +1,6 @@
 name := "noleme-json"
 organization := "com.noleme"
-version := "0.8.1"
+version := "0.8.2"
 
 crossPaths := false
 autoScalaLibrary := false

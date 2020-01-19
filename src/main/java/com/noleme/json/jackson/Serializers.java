@@ -114,7 +114,9 @@ public final class Serializers
      */
     public static void writeValue(JsonGenerator gen, Object value) throws IOException
     {
-        if (value instanceof Integer)
+        if (value == null)
+            gen.writeNull();
+        else if (value instanceof Integer)
             gen.writeNumber((Integer) value);
         else if (value instanceof Long)
             gen.writeNumber((Long) value);
