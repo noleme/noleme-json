@@ -127,7 +127,7 @@ public final class Serializers
         else if (value instanceof byte[])
             gen.writeBinary((byte[]) value);
         else
-            gen.writeRaw(value.toString());
+            gen.writeString(value.toString());
     }
 
     /**
