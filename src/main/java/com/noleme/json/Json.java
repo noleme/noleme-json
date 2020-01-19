@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Map;
  * We could trim this down quite a bit, but since this was made during a migration from a Play environment to a more agnostic environment, the shortest path was a clone of their helper.
  *
  * Note: The original implementation threw unspecified RuntimeExceptions, we changed those to a catchable JsonException (still unchecked).
+ * Note: Added the Jackson Afterburner module and several helper methods.
  *
  * @author Pierre Lecerf (pierre.lecerf@gmail.com)
  * Created on 24/04/2019
@@ -28,11 +30,16 @@ public class Json
 
     private Json() {}
 
+    /**
+     *
+     * @return
+     */
     public static ObjectMapper newDefaultMapper()
     {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
         mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(new AfterburnerModule());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper;
     }
@@ -52,6 +59,13 @@ public class Json
             return objectMapper;
     }
 
+    /**
+     *
+     * @param o
+     * @param prettyPrint
+     * @param escapeNonASCII
+     * @return
+     */
     private static String generateJson(Object o, boolean prettyPrint, boolean escapeNonASCII)
     {
         try {
