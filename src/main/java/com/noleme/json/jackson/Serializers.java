@@ -46,13 +46,37 @@ public final class Serializers
     /**
      *
      * @param gen
+     * @param value
+     * @throws IOException
+     */
+    public static void writeValue(JsonGenerator gen, Object value) throws IOException
+    {
+        if (value instanceof Integer)
+            gen.writeNumber((Integer) value);
+        else if (value instanceof Long)
+            gen.writeNumber((Long) value);
+        else if (value instanceof Float)
+            gen.writeNumber((Float) value);
+        else if (value instanceof Double)
+            gen.writeNumber((Double) value);
+        else if (value instanceof Boolean)
+            gen.writeBoolean((Boolean) value);
+        else if (value instanceof byte[])
+            gen.writeBinary((byte[]) value);
+        else
+            gen.writeRaw(value.toString());
+    }
+
+    /**
+     *
+     * @param gen
      * @param fieldName
      * @param values
      * @param serializer
      * @param <T>
      * @throws IOException
      */
-    public static <T> void writeObject(JsonGenerator gen, String fieldName, Map<String, T> values, FieldSerializer<T> serializer) throws IOException
+    public static <T> void writeObjectField(JsonGenerator gen, String fieldName, Map<String, T> values, FieldSerializer<T> serializer) throws IOException
     {
         gen.writeObjectFieldStart(fieldName);
         for (Map.Entry<String, T> e : values.entrySet())
@@ -68,15 +92,48 @@ public final class Serializers
      * @param gen
      * @param fieldName
      * @param values
+     * @throws IOException
+     */
+    public static void writeObjectField(JsonGenerator gen, String fieldName, Map<String, ?> values) throws IOException
+    {
+        gen.writeObjectFieldStart(fieldName);
+        for (Map.Entry<String, ?> e : values.entrySet())
+        {
+            gen.writeFieldName(e.getKey());
+            writeValue(gen, e.getValue());
+        }
+        gen.writeEndObject();
+    }
+
+    /**
+     *
+     * @param gen
+     * @param fieldName
+     * @param values
      * @param serializer
      * @param <T>
      * @throws IOException
      */
-    public static <T> void writeArray(JsonGenerator gen, String fieldName, Collection<T> values, FieldSerializer<T> serializer) throws IOException
+    public static <T> void writeArrayField(JsonGenerator gen, String fieldName, Collection<T> values, FieldSerializer<T> serializer) throws IOException
     {
         gen.writeArrayFieldStart(fieldName);
         for (T value : values)
             serializer.serialize(gen, value);
+        gen.writeEndArray();
+    }
+
+    /**
+     *
+     * @param gen
+     * @param fieldName
+     * @param values
+     * @throws IOException
+     */
+    public static void writeArrayField(JsonGenerator gen, String fieldName, Collection<?> values) throws IOException
+    {
+        gen.writeArrayFieldStart(fieldName);
+        for (Object value : values)
+            writeValue(gen, value);
         gen.writeEndArray();
     }
 
