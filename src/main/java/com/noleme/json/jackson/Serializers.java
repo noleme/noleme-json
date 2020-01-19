@@ -2,6 +2,7 @@ package com.noleme.json.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.noleme.json.Json;
 
@@ -19,14 +20,65 @@ public final class Serializers
 
     /**
      *
+     * @param mapper
+     * @param name
+     * @param type
+     * @param serializer
+     * @param <T>
+     */
+    public static <T> void register(ObjectMapper mapper, String name, Class<T> type, JsonSerializer<T> serializer)
+    {
+        mapper.registerModule(new SimpleModule(name) {
+            { this.addSerializer(type, serializer); }
+        });
+    }
+
+    /**
+     *
+     * @param mapper
+     * @param type
+     * @param serializer
+     * @param <T>
+     */
+    public static <T> void register(ObjectMapper mapper, Class<T> type, JsonSerializer<T> serializer)
+    {
+        register(mapper, type.getName(), type, serializer);
+    }
+
+    /**
+     *
+     * @param name
+     * @param type
+     * @param serializer
+     * @param <T>
+     */
+    public static <T> void register(String name, Class<T> type, JsonSerializer<T> serializer)
+    {
+        register(Json.mapper(), name, type, serializer);
+    }
+
+    /**
+     *
      * @param type
      * @param serializer
      * @param <T>
      */
     public static <T> void register(Class<T> type, JsonSerializer<T> serializer)
     {
-        Json.mapper().registerModule(new SimpleModule(type.getName()) {
-            { this.addSerializer(type, serializer); }
+        register(Json.mapper(), type, serializer);
+    }
+
+    /**
+     *
+     * @param mapper
+     * @param name
+     * @param serializers
+     * @param <T>
+     */
+    public static <T> void register(ObjectMapper mapper, String name, Map<Class<T>, JsonSerializer<T>> serializers)
+    {
+        mapper.registerModule(new SimpleModule(name) {
+            { serializers.forEach(this::addSerializer); }
         });
     }
 
@@ -38,9 +90,20 @@ public final class Serializers
      */
     public static <T> void register(String name, Map<Class<T>, JsonSerializer<T>> serializers)
     {
-        Json.mapper().registerModule(new SimpleModule(name) {
-            { serializers.forEach(this::addSerializer); }
-        });
+        register(Json.mapper(), name, serializers);
+    }
+
+    /**
+     *
+     * @param gen
+     * @param fieldName
+     * @param value
+     * @throws IOException
+     */
+    public static void writeValueField(JsonGenerator gen, String fieldName, Object value) throws IOException
+    {
+        gen.writeFieldName(fieldName);
+        writeValue(gen, value);
     }
 
     /**

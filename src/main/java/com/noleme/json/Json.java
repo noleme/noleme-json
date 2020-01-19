@@ -84,13 +84,44 @@ public class Json
     /**
      * Converts an object to JsonNode.
      *
+     * @param mapper The ObjectMapper to use for conversion.
+     * @param data Value to convert in Json.
+     * @return the JSON node.
+     */
+    public static JsonNode toJson(ObjectMapper mapper, final Object data)
+    {
+        try {
+            return mapper.valueToTree(data);
+        }
+        catch (Exception e) {
+            throw new JsonException(e);
+        }
+    }
+
+    /**
+     * Converts an object to JsonNode.
+     *
      * @param data Value to convert in Json.
      * @return the JSON node.
      */
     public static JsonNode toJson(final Object data)
     {
+        return toJson(mapper(), data);
+    }
+
+    /**
+     * Converts a JsonNode to a Java value
+     *
+     * @param <A>   the type of the return value.
+     * @param mapper The ObjectMapper to use for conversion.
+     * @param json  Json value to convert.
+     * @param clazz Expected Java value type.
+     * @return the return value.
+     */
+    public static <A> A fromJson(ObjectMapper mapper, JsonNode json, Class<A> clazz)
+    {
         try {
-            return mapper().valueToTree(data);
+            return mapper.treeToValue(json, clazz);
         }
         catch (Exception e) {
             throw new JsonException(e);
@@ -107,12 +138,7 @@ public class Json
      */
     public static <A> A fromJson(JsonNode json, Class<A> clazz)
     {
-        try {
-            return mapper().treeToValue(json, clazz);
-        }
-        catch (Exception e) {
-            throw new JsonException(e);
-        }
+        return fromJson(mapper(), json, clazz);
     }
 
     /**
