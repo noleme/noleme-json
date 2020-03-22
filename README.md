@@ -1,6 +1,6 @@
 # Noleme JSON
 
-_Last updated for v0.1_
+_Last updated for v0.8.3_
 
 This library is meant as a collection of JSON utility functions and most precisely as a specification for JSON third-party dependencies usage throughout all Noleme libraries.
 This is basically the place where the version requirements for Jackson (or other) are decided, and developments relying on JSON as a vehicle for data should use whichever
@@ -10,17 +10,20 @@ _Note: This library is considered as "in beta" and as such significant API chang
 
 ## I. Installation
 
-Add the following in your `build.sbt`:
+Add the following in your `pom.xml`:
 
-```
-//Noleme NLP
-libraryDependencies += "com.noleme" % "noleme-json" % "[0.1,)"
+```xml
+<dependency>
+    <groupId>com.noleme</groupId>
+    <artifactId>noleme-json</artifactId>
+    <version>0.8.3</version>
+</dependency>
 ```
 
 and run the following command in your shell:
 
 ```bash
-sbt update
+mvn install
 ```
 
 ## II. Notes on Structure and Design
@@ -38,7 +41,7 @@ _TODO_
 This project will require you to have the following:
 
 * Git (versioning)
-* SBT (dependency resolving, publishing and packaging) 
+* Maven (dependency resolving, publishing and packaging)
 
 ### B. Setup
 
