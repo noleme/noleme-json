@@ -20,12 +20,6 @@ Add the following in your `pom.xml`:
 </dependency>
 ```
 
-and run the following command in your shell:
-
-```bash
-mvn install
-```
-
 ## II. Notes on Structure and Design
 
 _TODO_
