@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.json.JsonWriteFeature;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.POJONode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.kjetland.jackson.jsonSchema.JsonSchemaConfig;
-import com.kjetland.jackson.jsonSchema.JsonSchemaDraft;
-import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +24,12 @@ import java.util.Map;
  * @author Pierre Lecerf (pierre.lecerf@gmail.com)
  * Created on 24/04/2019
  */
-public class Json
+public class Yaml
 {
     private static final ObjectMapper defaultObjectMapper = newDefaultMapper();
     private static volatile ObjectMapper objectMapper = null;
 
-    private Json() {}
+    private Yaml() {}
 
     /**
      *
@@ -38,10 +37,13 @@ public class Json
      */
     public static ObjectMapper newDefaultMapper()
     {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new JavaTimeModule());
-        //mapper.registerModule(new AfterburnerModule());
+        YAMLFactory factory = new YAMLFactory()
+            .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+        ;
+        ObjectMapper mapper = new ObjectMapper(factory)
+            .registerModule(new Jdk8Module())
+            .registerModule(new JavaTimeModule())
+        ;
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SnakeCaseStrategy.SNAKE_CASE);
@@ -70,7 +72,7 @@ public class Json
      * @param escapeNonASCII
      * @return
      */
-    private static String generateJson(Object o, boolean prettyPrint, boolean escapeNonASCII)
+    private static String generateYaml(Object o, boolean prettyPrint, boolean escapeNonASCII)
     {
         try {
             ObjectWriter writer = mapper().writer();
@@ -86,50 +88,13 @@ public class Json
     }
 
     /**
-     *
-     * @param c
-     * @return
-     */
-    public static JsonNode generateSchema(Class<?> c)
-    {
-        return generateSchema(c, JsonSchemaDraft.DRAFT_04);
-    }
-
-    /**
-     *
-     * @param c
-     * @param draft
-     * @return
-     */
-    public static JsonNode generateSchema(Class<?> c, JsonSchemaDraft draft)
-    {
-        return generateSchema(c, JsonSchemaConfig.vanillaJsonSchemaDraft4().withJsonSchemaDraft(draft));
-    }
-
-    /**
-     *
-     * @param c
-     * @param config
-     * @return
-     */
-    public static JsonNode generateSchema(Class<?> c, JsonSchemaConfig config)
-    {
-        try {
-            return new JsonSchemaGenerator(mapper(), config).generateJsonSchema(c);
-        }
-        catch (Exception e) {
-            throw new JsonException(e);
-        }
-    }
-
-    /**
      * Converts an object to JsonNode.
      *
      * @param mapper The ObjectMapper to use for conversion.
      * @param data Value to convert in Json.
      * @return the JSON node.
      */
-    public static JsonNode toJson(ObjectMapper mapper, final Object data)
+    public static JsonNode toYaml(ObjectMapper mapper, final Object data)
     {
         try {
             return mapper.valueToTree(data);
@@ -145,9 +110,9 @@ public class Json
      * @param data Value to convert in Json.
      * @return the JSON node.
      */
-    public static JsonNode toJson(final Object data)
+    public static JsonNode toYaml(final Object data)
     {
-        return toJson(mapper(), data);
+        return toYaml(mapper(), data);
     }
 
     /**
@@ -159,7 +124,7 @@ public class Json
      * @param clazz Expected Java value type.
      * @return the return value.
      */
-    public static <A> A fromJson(ObjectMapper mapper, JsonNode json, Class<A> clazz)
+    public static <A> A fromYaml(ObjectMapper mapper, JsonNode json, Class<A> clazz)
     {
         try {
             return mapper.treeToValue(json, clazz);
@@ -177,9 +142,9 @@ public class Json
      * @param clazz Expected Java value type.
      * @return the return value.
      */
-    public static <A> A fromJson(JsonNode json, Class<A> clazz)
+    public static <A> A fromYaml(JsonNode json, Class<A> clazz)
     {
-        return fromJson(mapper(), json, clazz);
+        return fromYaml(mapper(), json, clazz);
     }
 
     /**
@@ -210,7 +175,7 @@ public class Json
      */
     public static String stringify(JsonNode json)
     {
-        return generateJson(json, false, false);
+        return generateYaml(json, false, false);
     }
 
     /**
@@ -221,7 +186,7 @@ public class Json
      */
     public static String asciiStringify(JsonNode json)
     {
-        return generateJson(json, false, true);
+        return generateYaml(json, false, true);
     }
 
     /**
@@ -232,7 +197,7 @@ public class Json
      */
     public static String prettyPrint(JsonNode json)
     {
-        return generateJson(json, true, false);
+        return generateYaml(json, true, false);
     }
 
     /**
@@ -257,7 +222,7 @@ public class Json
      * @param src the JSON input stream.
      * @return the JSON node.
      */
-    public static JsonNode parse(java.io.InputStream src)
+    public static JsonNode parse(InputStream src)
     {
         try {
             return mapper().readTree(src);
@@ -303,7 +268,7 @@ public class Json
      */
     public static String asText(JsonNode node)
     {
-        return node.isNull() ? null : node.asText();
+        return Json.asText(node);
     }
 
     /**
@@ -313,7 +278,7 @@ public class Json
      */
     public static Long asLong(JsonNode node)
     {
-        return node.isNull() ? null : node.asLong();
+        return Json.asLong(node);
     }
 
     /**
@@ -323,7 +288,7 @@ public class Json
      */
     public static Integer asInteger(JsonNode node)
     {
-        return node.isNull() ? null : node.asInt();
+        return Json.asInteger(node);
     }
 
     /**
@@ -333,7 +298,7 @@ public class Json
      */
     public static Double asDouble(JsonNode node)
     {
-        return node.isNull() ? null : node.asDouble();
+        return Json.asDouble(node);
     }
 
     /**
@@ -343,7 +308,7 @@ public class Json
      */
     public static Boolean asBoolean(JsonNode node)
     {
-        return node.isNull() ? null : node.asBoolean();
+        return Json.asBoolean(node);
     }
 
     /**
@@ -353,9 +318,7 @@ public class Json
      */
     public static ObjectNode asObjectNode(JsonNode node)
     {
-        if (!node.isObject())
-            throw new JsonException("The provided node cannot be interpreted as an ObjectNode");
-        return node.isNull() ? null : (ObjectNode) node;
+        return Json.asObjectNode(node);
     }
 
     /**
@@ -365,9 +328,7 @@ public class Json
      */
     public static ArrayNode asArrayNode(JsonNode node)
     {
-        if (!node.isArray())
-            throw new JsonException("The provided node cannot be interpreted as an ArrayNode");
-        return node.isNull() ? null : (ArrayNode) node;
+        return Json.asArrayNode(node);
     }
 
     /**
@@ -377,23 +338,7 @@ public class Json
      */
     public static Object asValue(JsonNode node)
     {
-        if (!node.isValueNode())
-            throw new JsonException("The provided node is not a ValueNode");
-        if (node.isNull())
-            return null;
-        if (node.isTextual())
-            return node.asText();
-        if (node.isBoolean())
-            return node.asBoolean();
-        if (node.isDouble())
-            return node.asDouble();
-        if (node.isLong())
-            return node.asLong();
-        if (node.isInt())
-            return node.asInt();
-        if (node.isPojo())
-            return ((POJONode)node).getPojo();
-        return node;
+        return Json.asValue(node);
     }
 
     /**
@@ -401,11 +346,11 @@ public class Json
      * @param data
      * @return
      */
-    public static ObjectNode toJsonObject(final Map<String, ?> data)
+    public static ObjectNode toYamlObject(final Map<String, ?> data)
     {
-        ObjectNode array = Json.newObject();
+        ObjectNode array = Yaml.newObject();
         for (Map.Entry<String, ?> item : data.entrySet())
-            array.set(item.getKey(), Json.toJson(item.getValue()));
+            array.set(item.getKey(), Yaml.toYaml(item.getValue()));
         return array;
     }
 
@@ -414,11 +359,11 @@ public class Json
      * @param data
      * @return
      */
-    public static ArrayNode toJsonArray(final List<?> data)
+    public static ArrayNode toYamlArray(final List<?> data)
     {
-        ArrayNode array = Json.newArray();
+        ArrayNode array = Yaml.newArray();
         for (Object item : data)
-            array.add(Json.toJson(item));
+            array.add(Yaml.toYaml(item));
         return array;
     }
 }

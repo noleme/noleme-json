@@ -1,6 +1,6 @@
 # Noleme JSON
 
-_Last updated for v0.8.3_
+_Last updated for v0.9_
 
 This library is meant as a collection of JSON utility functions and most precisely as a specification for JSON third-party dependencies usage throughout all Noleme libraries.
 This is basically the place where the version requirements for Jackson (or other) are decided, and developments relying on JSON as a vehicle for data should use whichever
@@ -16,7 +16,7 @@ Add the following in your `pom.xml`:
 <dependency>
     <groupId>com.noleme</groupId>
     <artifactId>noleme-json</artifactId>
-    <version>0.8.3</version>
+    <version>0.9</version>
 </dependency>
 ```
 
