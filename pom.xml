@@ -4,16 +4,32 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.noleme</groupId>
     <artifactId>noleme-json</artifactId>
-    <version>0.8.3</version>
+    <version>0.9</version>
+    <packaging>jar</packaging>
 
-    <parent>
-        <groupId>com.noleme</groupId>
-        <artifactId>noleme-parent-pom</artifactId>
-        <version>1.0</version>
-    </parent>
+    <name>Noleme JSON</name>
+    <description>A collection of utility classes for working with the Jackson JSON implementation</description>
+    <url>https://gitlab.com/noleme/noleme-json</url>
+
+    <organization>
+        <name>Noleme</name>
+        <url>https://noleme.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Pierre Lecerf</name>
+            <email>pierre@noleme.com</email>
+            <organization>Noleme</organization>
+            <organizationUrl>https://noleme.com</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>8</maven.compiler.release>
         <jackson.version>2.10.2</jackson.version>
     </properties>
 
@@ -37,16 +53,128 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-afterburner</artifactId>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kjetland</groupId>
+            <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
+            <version>1.0.39</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
-    <repositories>
+    <issueManagement>
+        <system>GitLab</system>
+        <url>https://gitlab.com/noleme/noleme-json/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://gitlab.com/noleme/noleme-json/-/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://gitlab.com/noleme/noleme-json.git</connection>
+        <developerConnection>scm:git:ssh://gitlab.com:noleme/noleme-json.git</developerConnection>
+        <url>https://gitlab.com/noleme/noleme-json</url>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>nexus-releases</id>
-            <url>https://nexus.bebop.run/repository/maven-releases/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
-    </repositories>
+    </distributionManagement>
 </project>

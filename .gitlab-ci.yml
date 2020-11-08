@@ -8,17 +8,12 @@ cache:
   paths:
     - .m2/repository
 
-before_script:
-  # - npm install -g -q gulp
-  # - npm install -q
-  - mkdir -p ~/.m2 && cp $NOLEME_MAVEN_SETTINGS_XML ~/.m2/settings.xml
-
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-.verify: &verify
+.test: &test
   stage: test
   script:
-    - 'mvn $MAVEN_CLI_OPTS verify'
+    - 'mvn $MAVEN_CLI_OPTS test'
 #  except:
 #    - master
   artifacts:
@@ -27,4 +22,4 @@ before_script:
 
 # Verify merge requests using JDK8
 verify:jdk8:
-  <<: *verify
+  <<: *test
