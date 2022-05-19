@@ -6,7 +6,7 @@
 
     <groupId>com.noleme</groupId>
     <artifactId>noleme-json</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <packaging>jar</packaging>
 
     <name>Noleme JSON</name>
@@ -62,6 +62,13 @@
             <groupId>com.kjetland</groupId>
             <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
             <version>1.0.39</version>
+        </dependency>
+
+        <!-- Temporarily forcing upgraded version (jackson-jsonschema deps) -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-scripting-compiler-embeddable</artifactId>
+            <version>1.6.21</version>
         </dependency>
 
         <dependency>

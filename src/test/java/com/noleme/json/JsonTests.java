@@ -1,6 +1,8 @@
 package com.noleme.json;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.noleme.json.jackson.serializer.TestModel;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,6 +28,14 @@ public class JsonTests
             .put("key", "value")
         );
 
-        assertEquals("{\"name\":\"MyName\",\"age\":123,\"ratio\":0.2,\"list\":[1,2,3],\"obj\":{\"key\":\"value\"}}", node.toString());
+        assertEquals("{\"name\":\"MyName\",\"age\":123,\"ratio\":0.2,\"list\":[1,2,3],\"obj\":{\"key\":\"value\"}}", Json.stringify(node));
+    }
+
+    @Test
+    public void generateJsonSchema()
+    {
+        JsonNode schema = Json.generateSchema(TestModel.class);
+
+        assertEquals("{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"title\":\"Test Model\",\"type\":\"object\",\"additionalProperties\":false,\"properties\":{\"id\":{\"type\":\"string\"},\"label\":{\"type\":\"string\"},\"list\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}}}", Json.stringify(schema));
     }
 }
