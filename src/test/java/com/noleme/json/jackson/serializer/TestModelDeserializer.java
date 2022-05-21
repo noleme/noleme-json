@@ -13,7 +13,6 @@ import java.io.IOException;
  */
 public class TestModelDeserializer extends StdDeserializer<TestModel>
 {
-
     protected TestModelDeserializer(Class<?> vc)
     {
         super(vc);

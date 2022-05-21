@@ -1,6 +1,7 @@
 package com.noleme.json.jackson;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noleme.json.Json;
 import com.noleme.json.jackson.serializer.TestModel;
 import com.noleme.json.jackson.serializer.TestModelSerializer;
@@ -17,13 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class SerializersTests
 {
-    static {
-        Serializers.register(TestModel.class, new TestModelSerializer());
-    }
-
     @Test
     public void serializeOneTest()
     {
+        ObjectMapper mapper = Json.newDefaultMapper();
+        Serializers.register(mapper, TestModel.class, new TestModelSerializer());
+
         TestModel data = new TestModel()
             .setId("A1234B")
             .setLabel("Label")
@@ -31,15 +31,16 @@ public class SerializersTests
             .addListValue("v2")
         ;
 
-        JsonNode json = Json.toJson(data);
+        JsonNode json = Json.toJson(mapper, data);
 
-        assertEquals("{\"label\":\"Label\",\"list\":[\"v1\",\"v2\"]}", json.toString());
+        assertEquals("{\"label\":\"Label\",\"list\":[\"v1\",\"v2\"]}", Json.stringify(json));
     }
 
     @Test
     public void serializeManyTest()
     {
-        Serializers.register(TestModel.class, new TestModelSerializer());
+        ObjectMapper mapper = Json.newDefaultMapper();
+        Serializers.register(mapper, TestModel.class, new TestModelSerializer());
 
         List<TestModel> models = Arrays.asList(
             new TestModel()
@@ -59,8 +60,8 @@ public class SerializersTests
                 .addListValue("v4")
         );
 
-        JsonNode json = Json.toJson(models);
+        JsonNode json = Json.toJson(mapper, models);
 
-        assertEquals("[{\"label\":\"Label\",\"list\":[\"v1\",\"v2\"]},{\"label\":\"Other\",\"list\":[\"v2\",\"v3\"]},{\"label\":\"Meuh\",\"list\":[\"v3\",\"v4\"]}]", json.toString());
+        assertEquals("[{\"label\":\"Label\",\"list\":[\"v1\",\"v2\"]},{\"label\":\"Other\",\"list\":[\"v2\",\"v3\"]},{\"label\":\"Meuh\",\"list\":[\"v3\",\"v4\"]}]", Json.stringify(json));
     }
 }
