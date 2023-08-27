@@ -1,7 +1,7 @@
 package com.noleme.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.noleme.json.jackson.serializer.TestModel;
 import org.junit.jupiter.api.Test;
 
@@ -34,8 +34,8 @@ public class JsonTests
     @Test
     public void generateJsonSchema()
     {
-        JsonNode schema = Json.generateSchema(TestModel.class);
+        JsonSchema schema = Json.generateSchema(TestModel.class);
 
-        assertEquals("{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"title\":\"Test Model\",\"type\":\"object\",\"additionalProperties\":false,\"properties\":{\"id\":{\"type\":\"string\"},\"label\":{\"type\":\"string\"},\"list\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}}}", Json.stringify(schema));
+        assertEquals("{\"type\":\"object\",\"id\":\"urn:jsonschema:com:noleme:json:jackson:serializer:TestModel\",\"properties\":{\"id\":{\"type\":\"string\"},\"label\":{\"type\":\"string\"},\"list\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}}}", Json.toJson(schema).toString());
     }
 }

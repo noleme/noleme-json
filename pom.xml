@@ -6,7 +6,7 @@
 
     <groupId>com.noleme</groupId>
     <artifactId>noleme-json</artifactId>
-    <version>0.9.5</version>
+    <version>0.10</version>
     <packaging>jar</packaging>
 
     <name>Noleme JSON</name>
@@ -30,8 +30,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>8</maven.compiler.release>
-        <jackson.version>2.14.2</jackson.version>
-        <jackson-jsonschema.version>1.0.39</jackson-jsonschema.version>
+        <jackson.version>2.15.2</jackson.version>
+        <snakeyaml.version>2.1</snakeyaml.version>
         <slf4j.version>1.7.36</slf4j.version>
     </properties>
 
@@ -61,9 +61,15 @@
         </dependency>
 
         <dependency>
-            <groupId>com.kjetland</groupId>
-            <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
-            <version>${jackson-jsonschema.version}</version>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jsonSchema</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>

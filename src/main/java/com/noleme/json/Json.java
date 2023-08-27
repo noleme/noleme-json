@@ -7,9 +7,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.kjetland.jackson.jsonSchema.JsonSchemaConfig;
-import com.kjetland.jackson.jsonSchema.JsonSchemaDraft;
-import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +40,6 @@ public class Json
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
         mapper.registerModule(new JavaTimeModule());
-        //mapper.registerModule(new AfterburnerModule());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SnakeCaseStrategy.SNAKE_CASE);
@@ -90,32 +88,10 @@ public class Json
      * @param c
      * @return
      */
-    public static JsonNode generateSchema(Class<?> c)
-    {
-        return generateSchema(c, JsonSchemaDraft.DRAFT_04);
-    }
-
-    /**
-     *
-     * @param c
-     * @param draft
-     * @return
-     */
-    public static JsonNode generateSchema(Class<?> c, JsonSchemaDraft draft)
-    {
-        return generateSchema(c, JsonSchemaConfig.vanillaJsonSchemaDraft4().withJsonSchemaDraft(draft));
-    }
-
-    /**
-     *
-     * @param c
-     * @param config
-     * @return
-     */
-    public static JsonNode generateSchema(Class<?> c, JsonSchemaConfig config)
+    public static JsonSchema generateSchema(Class<?> c)
     {
         try {
-            return new JsonSchemaGenerator(mapper(), config).generateJsonSchema(c);
+            return new JsonSchemaGenerator(mapper()).generateSchema(c);
         }
         catch (Exception e) {
             throw new JsonException(e);
