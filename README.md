@@ -1,12 +1,14 @@
 # Noleme JSON
 
-_Last updated for v0.12_
+[![Maven Build](https://github.com/noleme/noleme-json/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/noleme/noleme-json/actions/workflows/maven-build.yml)
+[![Maven Central Version](https://img.shields.io/maven-central/v/com.noleme/noleme-json)](https://central.sonatype.com/artifact/com.noleme/noleme-json)
+[![javadoc](https://javadoc.io/badge2/com.noleme/noleme-json/javadoc.svg)](https://javadoc.io/doc/com.noleme/noleme-json)
+[![coverage](https://codecov.io/gh/noleme/noleme-json/branch/master/graph/badge.svg?token=Y9FD38RLDE)](https://codecov.io/gh/noleme/noleme-json)
+![GitHub](https://img.shields.io/github/license/noleme/noleme-json)
 
 This library is meant as a collection of JSON utility functions and most precisely as a specification for JSON third-party dependencies usage throughout all Noleme libraries.
 This is basically the place where the version requirements for Jackson (or other) are decided, and developments relying on JSON as a vehicle for data should use whichever
 implementation is specified by this project.
-
-_Note: This library is considered as "in beta" and as such significant API changes may occur without prior warning._
 
 ## I. Installation
 
