@@ -11,7 +11,7 @@
 
     <name>Noleme JSON</name>
     <description>A collection of utility classes for working with the Jackson JSON implementation</description>
-    <url>https://gitlab.com/noleme/noleme-json</url>
+    <url>https://github.com/noleme/noleme-json</url>
 
     <organization>
         <name>Noleme</name>
@@ -97,21 +97,21 @@
 
     <issueManagement>
         <system>GitLab</system>
-        <url>https://gitlab.com/noleme/noleme-json/issues</url>
+        <url>https://github.com/noleme/noleme-json/issues</url>
     </issueManagement>
 
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>https://gitlab.com/noleme/noleme-json/-/blob/master/LICENSE</url>
+            <url>https://github.com/noleme/noleme-json/-/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
 
     <scm>
-        <connection>scm:git:git://gitlab.com/noleme/noleme-json.git</connection>
-        <developerConnection>scm:git:ssh://gitlab.com:noleme/noleme-json.git</developerConnection>
-        <url>https://gitlab.com/noleme/noleme-json</url>
+        <connection>scm:git:git://github.com/noleme/noleme-json.git</connection>
+        <developerConnection>scm:git:ssh://github.com:noleme/noleme-json.git</developerConnection>
+        <url>https://github.com/noleme/noleme-json</url>
     </scm>
 
     <build>
